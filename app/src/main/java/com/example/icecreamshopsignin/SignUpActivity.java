@@ -18,7 +18,6 @@ public class SignUpActivity extends AppCompatActivity {
     ActivitySignUpBinding binding;
     DatabaseHelper databaseHelper;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,11 +59,6 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
-
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
