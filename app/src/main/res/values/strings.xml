@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Icecreamshopsignin</string>
+    <string name="app_name">Happy scoop</string>
+    <string name="logo_description">HappyScoop Support Logo</string>
+    <string name="support_center">Support Center</string>
+    <string name="please_contact_us">Please contact us at:</string>
+    <string name="support_email">supportcenter@HappyScoop.sa</string>
+    <string name="call_us">Call us</string>
 </resources>

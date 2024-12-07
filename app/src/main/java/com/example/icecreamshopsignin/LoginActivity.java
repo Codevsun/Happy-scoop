@@ -1,6 +1,7 @@
 package com.example.icecreamshopsignin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -32,16 +33,19 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = binding.loginEmail.getText().toString();
                 String password = binding.loginPassword.getText().toString();
+                UserManager.getInstance(LoginActivity.this).saveUserEmail(email);
 
                 if (email.equals("") || password.equals("")){
                     Toast.makeText(LoginActivity.this, " All Fields are Required", Toast.LENGTH_SHORT).show();
                 } else {
                     Boolean checkCredentials = databaseHelper.checkEmailPassword(email,password);
 
-                    if (checkCredentials == true){
-                        Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class); // Rahafs Page *
+                    if (checkCredentials) {
+                        // Save email using UserManager
+                        Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
+                        finish();
                     } else{
                         Toast.makeText(LoginActivity.this,"Email or Password is incorrect, Please try again", Toast.LENGTH_SHORT).show();
                     }

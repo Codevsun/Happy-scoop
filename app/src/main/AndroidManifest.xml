@@ -32,8 +32,10 @@
             android:name=".MakeIceCream"
             android:exported="false">
         </activity>
-        <activity android:name=".MenuList" />
+        <activity android:name=".MenuListActivity" />
         <activity android:name=".IceCreamDetailActivity" />
+        <activity android:name=".SupportCenterActivity" />
+        <activity android:name=".CartActivity" />
     </application>
 
 </manifest>

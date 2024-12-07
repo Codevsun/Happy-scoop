@@ -1,6 +1,7 @@
 package com.example.icecreamshopsignin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +17,7 @@ import com.example.icecreamshopsignin.Modules.IceCream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuList extends AppCompatActivity implements IceCreamAdapter.OnIceCreamClickListener {
+public class MenuListActivity extends AppCompatActivity implements IceCreamAdapter.OnIceCreamClickListener {
     private RecyclerView recyclerView;
     private IceCreamAdapter adapter;
     private List<IceCream> iceCreamList;
@@ -24,29 +25,30 @@ public class MenuList extends AppCompatActivity implements IceCreamAdapter.OnIce
 
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_list);
-        ImageView img = findViewById(R.id.btnBack);
-        img.setOnClickListener(v -> {
-            getOnBackPressedDispatcher().onBackPressed();
-        });
+
         // Initialize database helper
         databaseHelper = new DatabaseHelper(this);
 
-        // Initialize RecyclerView
-        recyclerView = findViewById(R.id.rvIceCreams);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // Check if user is logged in
+        String userEmail = UserManager.getInstance(this).getUserEmail();
+        if (userEmail.isEmpty()) {
+            Toast.makeText(this, "Please login first", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
 
-        // Load ice creams from database
+        setupViews();
         loadIceCreamsFromDatabase();
 
-        // If the database is empty, add some initial data
+        // If the database is empty, add initial data
         if (iceCreamList.isEmpty()) {
             addInitialMenuItems();
-            loadIceCreamsFromDatabase(); // Reload after adding items
+            loadIceCreamsFromDatabase();
         }
     }
 
@@ -72,7 +74,15 @@ public class MenuList extends AppCompatActivity implements IceCreamAdapter.OnIce
         adapter = new IceCreamAdapter(this, iceCreamList, this);
         recyclerView.setAdapter(adapter);
     }
+    private void setupViews() {
+        ImageView btnBack = findViewById(R.id.btnBack);
+        ImageView btnCart = findViewById(R.id.btnCart);
+        recyclerView = findViewById(R.id.rvIceCreams);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        btnBack.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+        btnCart.setOnClickListener(v -> startActivity(new Intent(MenuListActivity.this, CartActivity.class)));
+    }
     private void addInitialMenuItems() {
         databaseHelper.addMenuItem("Vanilla Ice Cream", 3.99, "Classic vanilla flavor", null);
         databaseHelper.addMenuItem("Chocolate Ice Cream", 4.49, "Rich chocolate flavor", null);
@@ -95,11 +105,11 @@ public class MenuList extends AppCompatActivity implements IceCreamAdapter.OnIce
 
     @Override
     public void onAddToCartClick(IceCream iceCream, int position) {
-        // Get current user ID from SharedPreferences or your session management
-        int userId = getCurrentUserId();
+        String userEmail = UserManager.getInstance(this).getUserEmail();
+        int userId = databaseHelper.getUserIdByEmail(userEmail);
 
         if (userId != -1) {
-            long result = databaseHelper.addToCart(userId, iceCream.getId(), 1, ""); // Default quantity 1, no customizations
+            long result = databaseHelper.addToCart(userId, iceCream.getId(), 1, "");
             if (result != -1) {
                 Toast.makeText(this, iceCream.getName() + " added to cart!", Toast.LENGTH_SHORT).show();
             } else {
@@ -107,10 +117,11 @@ public class MenuList extends AppCompatActivity implements IceCreamAdapter.OnIce
             }
         } else {
             Toast.makeText(this, "Please login first", Toast.LENGTH_SHORT).show();
-            // Optionally redirect to login screen
-            // startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
         }
     }
+
 
     @Override
     public void onViewDetailsClick(IceCream iceCream, int position) {
@@ -125,9 +136,8 @@ public class MenuList extends AppCompatActivity implements IceCreamAdapter.OnIce
 
 
     private int getCurrentUserId() {
-        // Implement your user session management here
-        // For example, using SharedPreferences:
-        return getSharedPreferences("UserPrefs", MODE_PRIVATE)
-                .getInt("current_user_id", -1);
+        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String userEmail = prefs.getString("email", "");
+        return databaseHelper.getUserId(userEmail);
     }
 }

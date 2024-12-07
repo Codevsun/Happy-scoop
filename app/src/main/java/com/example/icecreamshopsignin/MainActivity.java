@@ -23,26 +23,44 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Check login status using UserManager
+        String userEmail = UserManager.getInstance(this).getUserEmail();
+        if (userEmail.isEmpty()) {
+            // User not logged in, redirect to login
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
+        setupButtons();
+    }
+
+    private void setupButtons() {
         Button makeIceCreamButton = findViewById(R.id.makeIceCreamButton);
         Button exploreMenuButton = findViewById(R.id.exploreMenuButton);
         Button orderHistoryButton = findViewById(R.id.orderHistoryButton);
         Button contactUsButton = findViewById(R.id.contactUsButton);
 
-        // Set click listeners
-        makeIceCreamButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MakeIceCream.class);
-                startActivity(intent);
-            }
+        // Using lambda expressions for cleaner code
+        makeIceCreamButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, MakeIceCream.class);
+            startActivity(intent);
         });
 
-        exploreMenuButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MenuList.class);
-                startActivity(intent);
-            }
+        exploreMenuButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, MenuListActivity.class);
+            startActivity(intent);
         });
+
+        contactUsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SupportCenterActivity.class);
+            startActivity(intent);
+        });
+
+//        orderHistoryButton.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, OrderHistory.class);
+//            startActivity(intent);
+//        });
     }
 }

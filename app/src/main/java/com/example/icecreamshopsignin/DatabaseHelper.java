@@ -22,7 +22,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "name TEXT NOT NULL, " +
                     "price REAL NOT NULL, " +
                     "description TEXT, " +
-                    "image BLOB);";
+                    "image_resource TEXT" +
+                    ");";
 
     private static final String CREATE_CART_TABLE =
             "CREATE TABLE Cart (" +
@@ -113,7 +114,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userId;
     }
 
-    public long addMenuItem(String name, double price, String description, byte[] image) {
+    public long addMenuItem(String name, double price, String description,String image) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", name);
@@ -184,4 +185,70 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "WHERE OrderItems.order_id = ?";
         return db.rawQuery(query, new String[]{String.valueOf(orderId)});
     }
+
+    public void updateCartItemQuantity(int userId, int menuItemId, int quantity) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("quantity", quantity);
+        db.update("Cart", values, "user_id = ? AND menu_item_id = ?",
+                new String[]{String.valueOf(userId), String.valueOf(menuItemId)});
+    }
+    public boolean isCartEmpty(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM Cart WHERE user_id = ?",
+                new String[]{String.valueOf(userId)});
+        if (cursor.moveToFirst()) {
+            int count = cursor.getInt(0);
+            cursor.close();
+            return count == 0;
+        }
+        cursor.close();
+        return true;
+    }
+    public int getUserIdByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int userId = -1;
+
+        Cursor cursor = db.query(
+                "allusers",  // table name
+                new String[]{"id"},  // columns
+                "email = ?",  // selection
+                new String[]{email},  // selection args
+                null,
+                null,
+                null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            userId = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+            cursor.close();
+        }
+
+        return userId;
+    }
+    public void removeCartItem(int userId, int menuItemId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("Cart",
+                "user_id = ? AND menu_item_id = ?",
+                new String[]{String.valueOf(userId), String.valueOf(menuItemId)});
+    }
+
+    public double getCartTotal(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double total = 0.0;
+
+        String query = "SELECT SUM(Menu.price * Cart.quantity) as total FROM Cart " +
+                "INNER JOIN Menu ON Cart.menu_item_id = Menu.id " +
+                "WHERE Cart.user_id = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId)});
+
+        if (cursor != null && cursor.moveToFirst()) {
+            total = cursor.getDouble(cursor.getColumnIndexOrThrow("total"));
+            cursor.close();
+        }
+
+        return total;
+    }
+
 }

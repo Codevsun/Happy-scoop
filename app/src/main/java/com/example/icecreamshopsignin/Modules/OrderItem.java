@@ -1,11 +1,15 @@
 package com.example.icecreamshopsignin.Modules;
 
+import android.view.Menu;
+
 public class OrderItem {
     private int id;
     private int orderId;
     private int menuItemId;
     private int quantity;
     private String customizations;
+    private String name;
+    private double price;
 
     public OrderItem(int orderId, int menuItemId, int quantity, String customizations) {
         this.orderId = orderId;
@@ -24,4 +28,10 @@ public class OrderItem {
     public void setQuantity(int quantity) { this.quantity = quantity; }
     public String getCustomizations() { return customizations; }
     public void setCustomizations(String customizations) { this.customizations = customizations; }
+
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
 }

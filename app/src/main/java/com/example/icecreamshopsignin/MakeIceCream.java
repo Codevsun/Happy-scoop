@@ -70,8 +70,8 @@ public class MakeIceCream extends AppCompatActivity {
 
         cartButton.setOnClickListener(v -> {
             // Navigate to cart activity
-//            Intent intent = new Intent(MakeIceCream.this, CartActivity.class);
-//            startActivity(intent);
+            Intent intent = new Intent(MakeIceCream.this, CartActivity.class);
+            startActivity(intent);
         });
     }
 
