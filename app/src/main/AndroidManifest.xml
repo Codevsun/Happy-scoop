@@ -36,6 +36,8 @@
         <activity android:name=".IceCreamDetailActivity" />
         <activity android:name=".SupportCenterActivity" />
         <activity android:name=".CartActivity" />
+        <activity android:name=".OrderHistory" />
+
     </application>
 
 </manifest>

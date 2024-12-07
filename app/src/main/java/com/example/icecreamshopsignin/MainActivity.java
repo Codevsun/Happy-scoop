@@ -58,9 +58,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-//        orderHistoryButton.setOnClickListener(v -> {
-//            Intent intent = new Intent(MainActivity.this, OrderHistory.class);
-//            startActivity(intent);
-//        });
+        orderHistoryButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, OrderHistory.class);
+            startActivity(intent);
+        });
     }
 }

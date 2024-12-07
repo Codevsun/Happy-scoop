@@ -180,7 +180,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getOrderItems(int orderId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT OrderItems.*, Menu.name, Menu.price FROM OrderItems " +
+        String query = "SELECT OrderItems.id, OrderItems.menu_item_id, OrderItems.quantity, " +
+                "OrderItems.customizations, Menu.name, Menu.price " +
+                "FROM OrderItems " +
                 "INNER JOIN Menu ON OrderItems.menu_item_id = Menu.id " +
                 "WHERE OrderItems.order_id = ?";
         return db.rawQuery(query, new String[]{String.valueOf(orderId)});
