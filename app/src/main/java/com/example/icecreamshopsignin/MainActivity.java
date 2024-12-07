@@ -1,6 +1,9 @@
 package com.example.icecreamshopsignin;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +22,19 @@ public class MainActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+        Button makeIceCreamButton = findViewById(R.id.makeIceCreamButton);
+        Button exploreMenuButton = findViewById(R.id.exploreMenuButton);
+        Button orderHistoryButton = findViewById(R.id.orderHistoryButton);
+        Button contactUsButton = findViewById(R.id.contactUsButton);
+
+        // Set click listeners
+        makeIceCreamButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, com.example.icecreamshopsignin.MakeIceCream.class);
+                startActivity(intent);
+            }
         });
     }
 }

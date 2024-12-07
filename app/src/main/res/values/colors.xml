@@ -6,4 +6,7 @@
     <color name="purple">#CDC1FF</color>
     <color name="blue">#BFECFF</color>
     <color name="yellow">#FFF6E3</color>
+    <color name="light_blue"></color>
+    <color name="light_cream"></color>
+
 </resources>
