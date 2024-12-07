@@ -1,8 +1,7 @@
 package com.example.icecreamshopsignin;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -11,22 +10,41 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class MakeIceCream extends AppCompatActivity {
 
+    private DatabaseHelper dbHelper;
     private RadioGroup sizeRadioGroup;
     private CheckBox checkChocolate, checkVanilla, checkStrawberry, checkOreo, checkLemon, checkMint;
     private CheckBox checkSprinkles, checkChocoChips, checkCaramel, checkNuts;
     private Button addToCartButton;
     private ArrayList<CheckBox> selectedFlavors = new ArrayList<>();
     private int totalPrice = 0;
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.make_ice_cream);
+
+        // Initialize DatabaseHelper
+        dbHelper = new DatabaseHelper(this);
+
+        // Get userId from SharedPreferences
+        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String userEmail = prefs.getString("email", "");
+        userId = dbHelper.getUserId(userEmail);
+
         // Initialize Views
+        initializeViews();
+        setupListeners();
+    }
+
+    private void initializeViews() {
         sizeRadioGroup = findViewById(R.id.sizeRadioGroup);
         checkChocolate = findViewById(R.id.checkChocolate);
         checkVanilla = findViewById(R.id.checkVanilla);
@@ -41,11 +59,8 @@ public class MakeIceCream extends AppCompatActivity {
         checkNuts = findViewById(R.id.checkNuts);
 
         addToCartButton = findViewById(R.id.addToCartButton);
-
-
         ImageView backButton = findViewById(R.id.backButton);
         ImageView cartButton = findViewById(R.id.cartButton);
-
 
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(MakeIceCream.this, MainActivity.class);
@@ -53,20 +68,24 @@ public class MakeIceCream extends AppCompatActivity {
             finish();
         });
 
-        // Replace it with Ftoom Cart interface
-//        cartButton.setOnClickListener(v -> {
+        cartButton.setOnClickListener(v -> {
+            // Navigate to cart activity
 //            Intent intent = new Intent(MakeIceCream.this, CartActivity.class);
 //            startActivity(intent);
-//        });
+        });
+    }
 
-
+    private void setupListeners() {
         setFlavorRestrictions();
         setRealTimeListeners();
 
-        // Add to Cart Functionality
         addToCartButton.setOnClickListener(v -> {
-            saveDataToDatabase();
-            Toast.makeText(this, "Order added to cart!", Toast.LENGTH_SHORT).show();
+            if (userId != -1) {
+                saveOrderToDatabase();
+            } else {
+                Toast.makeText(this, "Please login first", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, LoginActivity.class));
+            }
         });
     }
 
@@ -97,10 +116,7 @@ public class MakeIceCream extends AppCompatActivity {
     }
 
     private void setRealTimeListeners() {
-        // Listener for Size Selection
         sizeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> updateTotalPrice());
-
-        // Listener for Toppings
         checkSprinkles.setOnCheckedChangeListener((buttonView, isChecked) -> updateTotalPrice());
         checkChocoChips.setOnCheckedChangeListener((buttonView, isChecked) -> updateTotalPrice());
         checkCaramel.setOnCheckedChangeListener((buttonView, isChecked) -> updateTotalPrice());
@@ -110,7 +126,7 @@ public class MakeIceCream extends AppCompatActivity {
     private void updateTotalPrice() {
         totalPrice = 0;
 
-        // Get Size Price
+        // Calculate size price
         int selectedSizeId = sizeRadioGroup.getCheckedRadioButtonId();
         if (selectedSizeId != -1) {
             RadioButton selectedSize = findViewById(selectedSizeId);
@@ -123,44 +139,65 @@ public class MakeIceCream extends AppCompatActivity {
             }
         }
 
-        // Get Flavors Price
+        // Add flavors price
         totalPrice += selectedFlavors.size() * 5;
 
-        // Get Toppings Price
+        // Add toppings price
         if (checkSprinkles.isChecked()) totalPrice += 2;
         if (checkChocoChips.isChecked()) totalPrice += 2;
         if (checkCaramel.isChecked()) totalPrice += 3;
         if (checkNuts.isChecked()) totalPrice += 3;
 
-        // Update Button Text with Total Price
         addToCartButton.setText("Add to Cart - Total: " + totalPrice + " SAR");
     }
 
-    private void saveDataToDatabase() {
-        SQLiteOpenHelper dbHelper = new com.example.icecreamapp.DatabaseHelper(this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+    private void saveOrderToDatabase() {
+        // Create customizations string
+        StringBuilder customizations = new StringBuilder();
 
-        StringBuilder flavors = new StringBuilder();
+        // Add selected size
+        RadioButton selectedSize = findViewById(sizeRadioGroup.getCheckedRadioButtonId());
+        customizations.append("Size: ").append(selectedSize.getText()).append("; ");
+
+        // Add selected flavors
+        customizations.append("Flavors: ");
         for (CheckBox flavor : selectedFlavors) {
-            flavors.append(flavor.getText().toString()).append(", ");
+            customizations.append(flavor.getText()).append(", ");
         }
 
-        String toppings = "";
-        if (checkSprinkles.isChecked()) toppings += "Sprinkles, ";
-        if (checkChocoChips.isChecked()) toppings += "Chocolate Chips, ";
-        if (checkCaramel.isChecked()) toppings += "Caramel Syrup, ";
-        if (checkNuts.isChecked()) toppings += "Nuts, ";
+        // Add selected toppings
+        customizations.append("; Toppings: ");
+        if (checkSprinkles.isChecked()) customizations.append("Sprinkles, ");
+        if (checkChocoChips.isChecked()) customizations.append("Chocolate Chips, ");
+        if (checkCaramel.isChecked()) customizations.append("Caramel Syrup, ");
+        if (checkNuts.isChecked()) customizations.append("Nuts, ");
 
-        db.execSQL("INSERT INTO Orders (size, flavors, toppings, total_price) VALUES (?, ?, ?, ?)",
-                new Object[]{
-                        ((RadioButton) findViewById(sizeRadioGroup.getCheckedRadioButtonId())).getText().toString(),
-                        flavors.toString(),
-                        toppings,
-                        totalPrice
-                });
+        // First add item to Menu if it doesn't exist
+        long menuItemId = dbHelper.addMenuItem("Custom Ice Cream", totalPrice,
+                customizations.toString(), null);
 
+        // Add to cart
+        dbHelper.addToCart(userId, (int)menuItemId, 1, customizations.toString());
 
+        Toast.makeText(this, "Added to cart successfully!", Toast.LENGTH_SHORT).show();
+
+        // Optionally clear selections
+        clearSelections();
+    }
+
+    private void clearSelections() {
+        sizeRadioGroup.clearCheck();
+        checkChocolate.setChecked(false);
+        checkVanilla.setChecked(false);
+        checkStrawberry.setChecked(false);
+        checkOreo.setChecked(false);
+        checkLemon.setChecked(false);
+        checkMint.setChecked(false);
+        checkSprinkles.setChecked(false);
+        checkChocoChips.setChecked(false);
+        checkCaramel.setChecked(false);
+        checkNuts.setChecked(false);
+        selectedFlavors.clear();
+        updateTotalPrice();
     }
 }
-
-
