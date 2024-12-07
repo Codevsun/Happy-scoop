@@ -126,8 +126,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getAllMenuItems() {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.query("Menu", null, null, null, null, null, null);
+        String query = "SELECT * FROM Menu WHERE name != 'Custom Ice Cream' ORDER BY id";
+        return db.rawQuery(query, null);
     }
+    public long getCustomIceCreamId() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        long id = 1; // Default ID if not found
+
+        Cursor cursor = db.rawQuery("SELECT id FROM Menu WHERE name = 'Custom Ice Cream' LIMIT 1", null);
+        if (cursor != null && cursor.moveToFirst()) {
+            id = cursor.getLong(cursor.getColumnIndexOrThrow("id"));
+            cursor.close();
+        }
+        return id;
+    }
+
 
     public long addToCart(int userId, int menuItemId, int quantity, String customizations) {
         SQLiteDatabase db = this.getWritableDatabase();

@@ -173,8 +173,8 @@ public class MakeIceCream extends AppCompatActivity {
         if (checkNuts.isChecked()) customizations.append("Nuts, ");
 
         // First add item to Menu if it doesn't exist
-        long menuItemId = dbHelper.addMenuItem("Custom Ice Cream", totalPrice,
-                customizations.toString(), null);
+        long menuItemId = dbHelper.getCustomIceCreamId();
+
 
         // Add to cart
         dbHelper.addToCart(userId, (int)menuItemId, 1, customizations.toString());
