@@ -35,7 +35,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <ImageView
-            android:id="@+id/btnCart"
+            android:id="@+id/cart"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/cart"
@@ -48,7 +48,7 @@
 
     <!-- List Container -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvIceCreams"
+        android:id="@+id/items_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingHorizontal="16dp"

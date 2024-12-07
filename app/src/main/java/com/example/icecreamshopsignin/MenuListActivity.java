@@ -43,13 +43,12 @@ public class MenuListActivity extends AppCompatActivity implements IceCreamAdapt
         }
 
         setupViews();
-        loadIceCreamsFromDatabase();
 
-        // If the database is empty, add initial data
-        if (iceCreamList.isEmpty()) {
-            addInitialMenuItems();
-            loadIceCreamsFromDatabase();
-        }
+        // Check if menu is empty
+        Cursor cursor = databaseHelper.getAllMenuItems();
+
+
+        loadIceCreamsFromDatabase();
     }
 
     private void loadIceCreamsFromDatabase() {
@@ -76,21 +75,29 @@ public class MenuListActivity extends AppCompatActivity implements IceCreamAdapt
     }
     private void setupViews() {
         ImageView btnBack = findViewById(R.id.btnBack);
-        ImageView btnCart = findViewById(R.id.btnCart);
-        recyclerView = findViewById(R.id.rvIceCreams);
+        ImageView btnCart = findViewById(R.id.cart);
+        recyclerView = findViewById(R.id.items_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         btnBack.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
         btnCart.setOnClickListener(v -> startActivity(new Intent(MenuListActivity.this, CartActivity.class)));
     }
     private void addInitialMenuItems() {
-        databaseHelper.addMenuItem("Vanilla Ice Cream", 3.99, "Classic vanilla flavor", null);
-        databaseHelper.addMenuItem("Chocolate Ice Cream", 4.49, "Rich chocolate flavor", null);
-        databaseHelper.addMenuItem("Strawberry Ice Cream", 4.99, "Fresh strawberry flavor", null);
+        databaseHelper.addMenuItem("Vanilla Ice Cream", 3.99,
+                "Smooth and creamy classic vanilla ice cream", null);
+        databaseHelper.addMenuItem("Chocolate Ice Cream", 4.49,
+                "Rich and decadent chocolate ice cream", null);
+        databaseHelper.addMenuItem("Strawberry Ice Cream", 4.99,
+                "Fresh strawberry flavored ice cream", null);
+        databaseHelper.addMenuItem("Orange Ice Cream", 3.99,
+                "Refreshing orange flavored ice cream", null);
+        databaseHelper.addMenuItem("Rice Ice Cream", 4.49,
+                "Unique rice flavored ice cream", null);
+        databaseHelper.addMenuItem("Blackberry Ice Cream", 4.99,
+                "Sweet and tart blackberry ice cream", null);
     }
 
     private int getImageResourceForFlavor(String flavorName) {
-        // Map flavor names to drawable resources
         switch (flavorName.toLowerCase()) {
             case "vanilla ice cream":
                 return R.drawable.img;

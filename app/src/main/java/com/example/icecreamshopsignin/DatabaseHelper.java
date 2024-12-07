@@ -114,13 +114,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userId;
     }
 
-    public long addMenuItem(String name, double price, String description,String image) {
+    public long addMenuItem(String name, double price, String description, String image) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", name);
         values.put("price", price);
         values.put("description", description);
-        values.put("image", image);
+        values.put("image_resource", image);
         return db.insert("Menu", null, values);
     }
 
@@ -131,7 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public long getCustomIceCreamId() {
         SQLiteDatabase db = this.getReadableDatabase();
-        long id = 1; // Default ID if not found
+        long id = -1; // Changed to -1 to indicate not found
 
         Cursor cursor = db.rawQuery("SELECT id FROM Menu WHERE name = 'Custom Ice Cream' LIMIT 1", null);
         if (cursor != null && cursor.moveToFirst()) {

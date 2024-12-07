@@ -156,32 +156,53 @@ public class MakeIceCream extends AppCompatActivity {
         StringBuilder customizations = new StringBuilder();
 
         // Add selected size
-        RadioButton selectedSize = findViewById(sizeRadioGroup.getCheckedRadioButtonId());
-        customizations.append("Size: ").append(selectedSize.getText()).append("; ");
+        int selectedSizeId = sizeRadioGroup.getCheckedRadioButtonId();
+        if (selectedSizeId != -1) {
+            RadioButton selectedSize = findViewById(selectedSizeId);
+            customizations.append("Size: ").append(selectedSize.getText()).append("\n");
+        }
 
         // Add selected flavors
-        customizations.append("Flavors: ");
-        for (CheckBox flavor : selectedFlavors) {
-            customizations.append(flavor.getText()).append(", ");
+        if (!selectedFlavors.isEmpty()) {
+            customizations.append("Flavors: ");
+            for (int i = 0; i < selectedFlavors.size(); i++) {
+                customizations.append(selectedFlavors.get(i).getText());
+                if (i < selectedFlavors.size() - 1) {
+                    customizations.append(", ");
+                }
+            }
+            customizations.append("\n");
         }
 
         // Add selected toppings
-        customizations.append("; Toppings: ");
-        if (checkSprinkles.isChecked()) customizations.append("Sprinkles, ");
-        if (checkChocoChips.isChecked()) customizations.append("Chocolate Chips, ");
-        if (checkCaramel.isChecked()) customizations.append("Caramel Syrup, ");
-        if (checkNuts.isChecked()) customizations.append("Nuts, ");
+        ArrayList<String> toppings = new ArrayList<>();
+        if (checkSprinkles.isChecked()) toppings.add("Sprinkles");
+        if (checkChocoChips.isChecked()) toppings.add("Chocolate Chips");
+        if (checkCaramel.isChecked()) toppings.add("Caramel Syrup");
+        if (checkNuts.isChecked()) toppings.add("Nuts");
+
+        if (!toppings.isEmpty()) {
+            customizations.append("Toppings: ");
+            for (int i = 0; i < toppings.size(); i++) {
+                customizations.append(toppings.get(i));
+                if (i < toppings.size() - 1) {
+                    customizations.append(", ");
+                }
+            }
+        }
 
         // First add item to Menu if it doesn't exist
         long menuItemId = dbHelper.getCustomIceCreamId();
+        if (menuItemId == -1) {
+            // Add custom ice cream to menu if it doesn't exist
+            menuItemId = dbHelper.addMenuItem("Custom Ice Cream", totalPrice,
+                    "Customized ice cream", null);
+        }
 
-
-        // Add to cart
+        // Add to cart with the formatted customizations
         dbHelper.addToCart(userId, (int)menuItemId, 1, customizations.toString());
 
         Toast.makeText(this, "Added to cart successfully!", Toast.LENGTH_SHORT).show();
-
-        // Optionally clear selections
         clearSelections();
     }
 
