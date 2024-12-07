@@ -32,7 +32,15 @@ public class MainActivity extends AppCompatActivity {
         makeIceCreamButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, com.example.icecreamshopsignin.MakeIceCream.class);
+                Intent intent = new Intent(MainActivity.this, MakeIceCream.class);
+                startActivity(intent);
+            }
+        });
+
+        exploreMenuButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MenuList.class);
                 startActivity(intent);
             }
         });

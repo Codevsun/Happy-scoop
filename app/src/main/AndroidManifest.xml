@@ -27,8 +27,13 @@
         <activity
             android:name=".MainActivity"
             android:exported="false">
-
         </activity>
+        <activity
+            android:name=".MakeIceCream"
+            android:exported="false">
+        </activity>
+        <activity android:name=".MenuList" />
+        <activity android:name=".IceCreamDetailActivity" />
     </application>
 
 </manifest>

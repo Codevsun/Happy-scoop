@@ -5,13 +5,13 @@ public class IceCream {
     private String name;
     private double price;
     private String description;
-    private byte[] image;
+    private int imageResourceId;
 
-    public IceCream(String name, double price, String description, byte[] image) {
+    public IceCream(String name, double price, String description, int imageResourceId) {
         this.name = name;
         this.price = price;
         this.description = description;
-        this.image = image;
+        this.imageResourceId = imageResourceId;
     }
 
     public int getId() { return id; }
@@ -22,6 +22,6 @@ public class IceCream {
     public void setPrice(double price) { this.price = price; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
-    public byte[] getImage() { return image; }
-    public void setImage(byte[] image) { this.image = image; }
+    public int getImageResourceId() { return imageResourceId; }
+    public void setImageResourceId(int imageResourceId) { this.imageResourceId = imageResourceId; }
 }
