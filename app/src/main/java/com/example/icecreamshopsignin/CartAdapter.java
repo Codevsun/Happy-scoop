@@ -65,6 +65,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
         void bind(CartItem item) {
             nameText.setText(item.getName());
+
+            // Show customizations if they exist
+            if (item.getCustomizations() != null && !item.getCustomizations().isEmpty()) {
+                String customText = item.getName() + "\n" + item.getCustomizations();
+                nameText.setText(customText);
+            }
+
             priceText.setText(String.format(Locale.getDefault(), "$%.2f",
                     item.getPrice() * item.getQuantity()));
             quantityText.setText(String.valueOf(item.getQuantity()));

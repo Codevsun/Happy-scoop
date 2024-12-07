@@ -144,12 +144,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public long addToCart(int userId, int menuItemId, int quantity, String customizations) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("user_id", userId);
-        values.put("menu_item_id", menuItemId);
-        values.put("quantity", quantity);
-        values.put("customizations", customizations);
-        return db.insert("Cart", null, values);
+
+        // For custom ice cream, create a new menu item for each customization
+        if (menuItemId == getCustomIceCreamId()) {
+            ContentValues menuValues = new ContentValues();
+            menuValues.put("name", "Custom Ice Cream");
+
+            // Get the base price from the customizations
+            int price = extractPriceFromCustomizations(customizations);
+            menuValues.put("price", price);
+            menuValues.put("description", customizations);
+
+            // Add new menu item
+            menuItemId = (int) db.insert("Menu", null, menuValues);
+        }
+
+        ContentValues cartValues = new ContentValues();
+        cartValues.put("user_id", userId);
+        cartValues.put("menu_item_id", menuItemId);
+        cartValues.put("quantity", quantity);
+        cartValues.put("customizations", customizations);
+
+        return db.insert("Cart", null, cartValues);
+    }
+
+    private int extractPriceFromCustomizations(String customizations) {
+        int totalPrice = 0;
+
+        // Parse the customizations string to calculate the price
+        String[] lines = customizations.split("\n");
+        for (String line : lines) {
+            if (line.contains("SAR")) {
+                String[] parts = line.split("-");
+                if (parts.length > 1) {
+                    String priceStr = parts[1].trim().replace(" SAR", "");
+                    try {
+                        totalPrice += Integer.parseInt(priceStr);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        return totalPrice;
     }
 
     public Cursor getCartItems(int userId) {
