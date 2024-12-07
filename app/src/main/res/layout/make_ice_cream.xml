@@ -1,0 +1,223 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_cream"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Back and Cart Buttons -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/back"
+                android:contentDescription="Back"
+                android:layout_alignParentStart="true" />
+
+            <ImageView
+                android:id="@+id/cartButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/cart"
+                android:contentDescription="Cart"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+
+        <!-- Picture Placeholder -->
+        <ImageView
+            android:id="@+id/picturePlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="16dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ice_flavour"
+            android:contentDescription="Picture Placeholder" />
+
+        <!-- Size Section -->
+        <TextView
+            android:id="@+id/sizeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Size"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000" />
+
+        <!-- Flavours Section -->
+        <RadioGroup
+            android:id="@+id/sizeRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radioSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Small - 10 SAR"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/radioMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medium - 15 SAR"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/radioLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Large - 20 SAR"
+                android:textColor="#000"
+                android:textSize="16sp" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/flavourTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Choose your flavour – (3 flavours maximum)"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000" />
+
+        <LinearLayout
+            android:id="@+id/flavourChoices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
+
+            <CheckBox
+                android:id="@+id/checkChocolate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chocolate - 5 SAR"
+                android:textSize="16sp"
+                android:textColor="#000" />
+
+            <CheckBox
+                android:id="@+id/checkVanilla"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vanilla - 5 SAR"
+                android:textSize="16sp"
+                android:textColor="#000" />
+
+            <CheckBox
+                android:id="@+id/checkStrawberry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Strawberry - 5 SAR"
+                android:textSize="16sp"
+                android:textColor="#000" />
+
+            <CheckBox
+                android:id="@+id/checkOreo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Oreo - 5 SAR"
+                android:textSize="16sp"
+                android:textColor="#000" />
+
+            <CheckBox
+                android:id="@+id/checkLemon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lemon - 5 SAR"
+                android:textSize="16sp"
+                android:textColor="#000" />
+
+            <CheckBox
+                android:id="@+id/checkMint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mint- 5 SAR"
+                android:textSize="16sp"
+                android:textColor="#000" />
+
+
+        </LinearLayout>
+
+        <!-- Toppings Section -->
+        <TextView
+            android:id="@+id/toppingTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Toppings"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000" />
+
+        <LinearLayout
+            android:id="@+id/toppingChoices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
+
+            <CheckBox
+                android:id="@+id/checkSprinkles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sprinkles - 2 SAR"
+                android:textSize="16sp"
+                android:textColor="#000" />
+
+            <CheckBox
+                android:id="@+id/checkChocoChips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chocolate Chips - 2 SAR"
+                android:textSize="16sp"
+                android:textColor="#000" />
+
+            <CheckBox
+                android:id="@+id/checkCaramel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Caramel syrup - 3 SAR"
+                android:textSize="16sp"
+                android:textColor="#000" />
+
+            <CheckBox
+                android:id="@+id/checkNuts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nuts - 3 SAR"
+                android:textSize="16sp"
+                android:textColor="#000" />
+
+        </LinearLayout>
+
+        <!-- Add to Cart Button -->
+        <Button
+            android:id="@+id/addToCartButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/light_blue"
+            android:text="Add to Cart - Total: 0 SAR"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:padding="12dp" />
+    </LinearLayout>
+</ScrollView>
+
+
