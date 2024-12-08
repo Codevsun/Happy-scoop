@@ -106,6 +106,8 @@ public class MenuListActivity extends AppCompatActivity implements IceCreamAdapt
 
 
     private int getImageResourceForFlavor(String flavorName) {
+        if (flavorName == null) return R.drawable.blue;
+        
         switch (flavorName.toLowerCase()) {
             case "vanilla ice cream":
                 return R.drawable.vanilla;
@@ -113,12 +115,14 @@ public class MenuListActivity extends AppCompatActivity implements IceCreamAdapt
                 return R.drawable.chocolate;
             case "strawberry ice cream":
                 return R.drawable.strawberry;
-            case "Orange Ice Cream":
+            case "orange ice cream":
                 return R.drawable.orange;
-            case "Rice Ice Cream":
+            case "rice ice cream":
                 return R.drawable.rice;
+            case "blackberry ice cream":
+                return R.drawable.blue;
             default:
-                return R.drawable.blue; // Default image
+                return R.drawable.blue;
         }
     }
 

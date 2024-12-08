@@ -29,7 +29,7 @@ public class IceCreamDetailActivity extends AppCompatActivity {
         String name = intent.getStringExtra("name");
         double price = intent.getDoubleExtra("price", 0.0);
         String description = intent.getStringExtra("description");
-        int imageResource = intent.getIntExtra("image_resource", R.drawable.blue);
+        int imageResource = getImageResourceForFlavor(name);
 
         // Set up views
         ImageView imageView = findViewById(R.id.ivDetailImage);
@@ -46,6 +46,27 @@ public class IceCreamDetailActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> onBackPressed());
         
         btnAddToCart.setOnClickListener(v -> addToCart());
+    }
+
+    private int getImageResourceForFlavor(String flavorName) {
+        if (flavorName == null) return R.drawable.blue;
+        
+        switch (flavorName.toLowerCase()) {
+            case "vanilla ice cream":
+                return R.drawable.vanilla;
+            case "chocolate ice cream":
+                return R.drawable.chocolate;
+            case "strawberry ice cream":
+                return R.drawable.strawberry;
+            case "orange ice cream":
+                return R.drawable.orange;
+            case "rice ice cream":
+                return R.drawable.rice;
+            case "blackberry ice cream":
+                return R.drawable.blue;
+            default:
+                return R.drawable.blue;
+        }
     }
 
     private void addToCart() {

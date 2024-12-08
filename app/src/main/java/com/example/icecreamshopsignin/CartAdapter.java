@@ -39,7 +39,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
         CartItem item = cartItems.get(position);
-        holder.bind(item);
+        holder.bind(item, listener);
     }
 
     @Override
@@ -47,23 +47,51 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         return cartItems.size();
     }
 
-    class CartViewHolder extends RecyclerView.ViewHolder {
-        private final TextView nameText, priceText, quantityText;
-        private final ImageButton deleteButton, incrementButton, decrementButton;
-        private final ImageView productImage;
+    private static int getImageResourceForFlavor(String flavorName) {
+        if (flavorName == null) return R.drawable.blue;
+        
+        switch (flavorName.toLowerCase()) {
+            case "vanilla ice cream":
+                return R.drawable.vanilla;
+            case "chocolate ice cream":
+                return R.drawable.chocolate;
+            case "strawberry ice cream":
+                return R.drawable.strawberry;
+            case "orange ice cream":
+                return R.drawable.orange;
+            case "rice ice cream":
+                return R.drawable.rice;
+            case "blackberry ice cream":
+                return R.drawable.blue;
+            default:
+                return R.drawable.blue;
+        }
+    }
 
-        CartViewHolder(@NonNull View itemView) {
+    public static class CartViewHolder extends RecyclerView.ViewHolder {
+        ImageView productImage;
+        TextView nameText;
+        TextView priceText;
+        TextView quantityText;
+        ImageButton deleteButton;
+        ImageButton incrementButton;
+        ImageButton decrementButton;
+
+        public CartViewHolder(@NonNull View itemView) {
             super(itemView);
+            productImage = itemView.findViewById(R.id.product_image);
             nameText = itemView.findViewById(R.id.product_name);
             priceText = itemView.findViewById(R.id.product_price);
             quantityText = itemView.findViewById(R.id.quantity_text);
             deleteButton = itemView.findViewById(R.id.delete_button);
             incrementButton = itemView.findViewById(R.id.increment_button);
             decrementButton = itemView.findViewById(R.id.decrement_button);
-            productImage = itemView.findViewById(R.id.product_image);
         }
 
-        void bind(CartItem item) {
+        void bind(CartItem item, CartItemListener listener) {
+            // Set the product image
+            productImage.setImageResource(getImageResourceForFlavor(item.getName()));
+            
             nameText.setText(item.getName());
 
             // Show customizations if they exist
