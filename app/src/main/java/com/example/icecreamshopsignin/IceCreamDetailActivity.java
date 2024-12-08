@@ -1,10 +1,7 @@
 package com.example.icecreamshopsignin;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,7 +21,7 @@ public class IceCreamDetailActivity extends AppCompatActivity {
         String name = intent.getStringExtra("name");
         double price = intent.getDoubleExtra("price", 0.0);
         String description = intent.getStringExtra("description");
-        int imageResource = intent.getIntExtra("image_resource", R.drawable.img);
+        int imageResource = intent.getIntExtra("image_resource", R.drawable.blue);
 
 
         // Set up views

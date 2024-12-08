@@ -37,7 +37,9 @@
         <activity android:name=".SupportCenterActivity" />
         <activity android:name=".CartActivity" />
         <activity android:name=".OrderHistory" />
-
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

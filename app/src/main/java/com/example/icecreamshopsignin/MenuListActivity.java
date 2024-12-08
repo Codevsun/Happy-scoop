@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -100,13 +99,17 @@ public class MenuListActivity extends AppCompatActivity implements IceCreamAdapt
     private int getImageResourceForFlavor(String flavorName) {
         switch (flavorName.toLowerCase()) {
             case "vanilla ice cream":
-                return R.drawable.img;
+                return R.drawable.vanilla;
             case "chocolate ice cream":
-                return R.drawable.img_1;
+                return R.drawable.chocolate;
             case "strawberry ice cream":
-                return R.drawable.img_3;
+                return R.drawable.strawberry;
+            case "Orange Ice Cream":
+                return R.drawable.strawberry;
+            case "Rice Ice Cream":
+                return R.drawable.rice;
             default:
-                return R.drawable.img; // Default image
+                return R.drawable.blue; // Default image
         }
     }
 

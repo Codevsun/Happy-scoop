@@ -303,5 +303,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return total;
     }
+    public boolean updatePassword(String email, String newPassword) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("password", newPassword);
 
+        int rowsAffected = db.update("allusers", values, "email = ?", new String[]{email});
+        return rowsAffected > 0;
+    }
 }
