@@ -8,13 +8,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "happyscoop";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     private static final String CREATE_USERS_TABLE =
             "CREATE TABLE allusers (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "email TEXT UNIQUE NOT NULL, " +
-                    "password TEXT NOT NULL);";
+                    "password TEXT NOT NULL, " +
+                    "username TEXT, " +
+                    "phone TEXT, " +
+                    "created_at DATETIME DEFAULT CURRENT_TIMESTAMP);";
 
     private static final String CREATE_MENU_TABLE =
             "CREATE TABLE Menu (" +
@@ -78,15 +81,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // User Management
-    public boolean insertData(String email, String password) {
+    public boolean insertData(String email, String password, String username, String phone) {
         SQLiteDatabase MyDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("email", email);
         contentValues.put("password", password);
+        contentValues.put("username", username);
+        contentValues.put("phone", phone);
+
         long result = MyDatabase.insert("allusers", null, contentValues);
         return result != -1;
     }
-
     public boolean checkEmail(String email) {
         SQLiteDatabase MyDatabase = this.getWritableDatabase();
         Cursor cursor = MyDatabase.rawQuery("Select * from allusers where email = ?", new String[]{email});
@@ -311,4 +316,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int rowsAffected = db.update("allusers", values, "email = ?", new String[]{email});
         return rowsAffected > 0;
     }
+
+
 }

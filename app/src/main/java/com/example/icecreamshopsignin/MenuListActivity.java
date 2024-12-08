@@ -31,6 +31,13 @@ public class MenuListActivity extends AppCompatActivity implements IceCreamAdapt
 
         // Initialize database helper
         databaseHelper = new DatabaseHelper(this);
+        
+        // Add this line to populate menu items
+        Cursor menuCursor = databaseHelper.getAllMenuItems();
+        if (!menuCursor.moveToFirst()) {
+            addInitialMenuItems();
+        }
+        menuCursor.close();
 
         // Check if user is logged in
         String userEmail = UserManager.getInstance(this).getUserEmail();
@@ -95,6 +102,8 @@ public class MenuListActivity extends AppCompatActivity implements IceCreamAdapt
         databaseHelper.addMenuItem("Blackberry Ice Cream", 4.99,
                 "Sweet and tart blackberry ice cream", null);
     }
+    
+
 
     private int getImageResourceForFlavor(String flavorName) {
         switch (flavorName.toLowerCase()) {
@@ -105,7 +114,7 @@ public class MenuListActivity extends AppCompatActivity implements IceCreamAdapt
             case "strawberry ice cream":
                 return R.drawable.strawberry;
             case "Orange Ice Cream":
-                return R.drawable.strawberry;
+                return R.drawable.orange;
             case "Rice Ice Cream":
                 return R.drawable.rice;
             default:
